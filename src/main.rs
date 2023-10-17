@@ -9,7 +9,7 @@ fn main() {
 
 fn setup_camera(mut commands: Commands) {
     commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(20., 20., 20.).looking_at(Vec3::ZERO, Vec3::Y),
+        transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
         ..default()
     });
 }
