@@ -3,10 +3,10 @@ use bevy::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_systems(Startup, hello_world)
+        .add_systems(Startup, setup)
         .run();
 }
 
-fn hello_world() {
-    println!("Hello World!");
+fn setup(mut commands: Commands) {
+    commands.spawn(Camera3dBundle::default());
 }
