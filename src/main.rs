@@ -40,6 +40,14 @@ fn setup_camera(mut commands: Commands) {
             ..default()
         },
         FlyCam,
+        FogSettings {
+            color: Color::rgba(0.01, 0.01, 0.01, 0.9),
+            falloff: FogFalloff::Linear {
+                start: 15.0,
+                end: 40.0,
+            },
+            ..default()
+        },
     ));
 }
 
@@ -79,7 +87,7 @@ fn setup_cubes(
                         ..default()
                     })
                     .insert(Rotaty {
-                        t: (z * 10 + x) as f32,
+                        t: (z as f32 * 10.0 + x as f32 + y as f32 * 0.15),
                     });
             }
         }
