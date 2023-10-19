@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_flycam::prelude::*;
 
 #[derive(Component)]
 struct Rotaty {
@@ -8,16 +9,29 @@ struct Rotaty {
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(NoCameraPlayerPlugin)
+        .insert_resource(MovementSettings {
+            sensitivity: 0.00005,
+            speed: 7.0,
+        })
+        .insert_resource(KeyBindings {
+            move_ascend: KeyCode::E,
+            move_descend: KeyCode::Q,
+            ..Default::default()
+        })
         .add_systems(Startup, (setup_camera, setup_cubes))
         .add_systems(Update, rotate)
         .run();
 }
 
 fn setup_camera(mut commands: Commands) {
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    });
+    commands.spawn((
+        Camera3dBundle {
+            transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
+            ..default()
+        },
+        FlyCam,
+    ));
 }
 
 fn setup_cubes(
