@@ -9,6 +9,8 @@ struct Rotaty {
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.1)))
+        // FlyCam
         .add_plugins(NoCameraPlayerPlugin)
         .insert_resource(MovementSettings {
             sensitivity: 0.00005,
@@ -19,8 +21,10 @@ fn main() {
             move_descend: KeyCode::Q,
             ..Default::default()
         })
+        // My Stuff
         .add_systems(Startup, (setup_camera, setup_cubes))
         .add_systems(Update, rotate)
+        // Let's go
         .run();
 }
 
@@ -40,7 +44,7 @@ fn setup_cubes(
     mut material_assets: ResMut<Assets<StandardMaterial>>,
 ) {
     let mesh = mesh_assets.add(shape::Box::new(1., 1., 1.).into());
-    let material = material_assets.add(Color::rgb(0.5, 0.5, 1.0).into());
+    let material = material_assets.add(Color::rgb(1.0, 1.0, 1.0).into());
 
     for x in -5..5 {
         for y in -5..5 {
