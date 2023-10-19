@@ -10,6 +10,11 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.1)))
+        .insert_resource(bevy::pbr::DirectionalLightShadowMap { size: 4096 })
+        .insert_resource(AmbientLight {
+            color: Color::WHITE,
+            brightness: 0.2,
+        })
         // FlyCam
         .add_plugins(NoCameraPlayerPlugin)
         .insert_resource(MovementSettings {
@@ -22,7 +27,7 @@ fn main() {
             ..Default::default()
         })
         // My Stuff
-        .add_systems(Startup, (setup_camera, setup_cubes))
+        .add_systems(Startup, (setup_camera, setup_lighting, setup_cubes))
         .add_systems(Update, rotate)
         // Let's go
         .run();
@@ -36,6 +41,17 @@ fn setup_camera(mut commands: Commands) {
         },
         FlyCam,
     ));
+}
+
+fn setup_lighting(mut commands: Commands) {
+    commands.spawn(DirectionalLightBundle {
+        directional_light: DirectionalLight {
+            illuminance: 1000.0,
+            ..default()
+        },
+
+        ..default()
+    });
 }
 
 fn setup_cubes(
@@ -62,16 +78,24 @@ fn setup_cubes(
 
                         ..default()
                     })
-                    .insert(Rotaty { t: 0.0 });
+                    .insert(Rotaty {
+                        t: (z * 10 + x) as f32,
+                    });
             }
         }
     }
 }
 
-fn rotate(mut entities: Query<&mut Transform, With<Rotaty>>, time: Res<Time>) {
-    let dt = time.delta_seconds();
+fn rotate(mut entities: Query<(&mut Transform, &Rotaty)>, time: Res<Time>) {
+    let time = time.elapsed_seconds();
 
-    for mut transform in entities.iter_mut() {
-        transform.rotate_y(1.0 * dt);
+    for (mut transform, rotaty) in entities.iter_mut() {
+        let particle_time = time + rotaty.t;
+        transform.rotation = Quat::from_euler(
+            EulerRot::XYZ,
+            particle_time.sin(),
+            particle_time.cos(),
+            particle_time.sin(),
+        );
     }
 }
