@@ -1,4 +1,7 @@
-use bevy::prelude::*;
+use bevy::{
+    core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
+    prelude::*,
+};
 use bevy_flycam::prelude::*;
 
 #[derive(Component)]
@@ -36,9 +39,15 @@ fn main() {
 fn setup_camera(mut commands: Commands) {
     commands.spawn((
         Camera3dBundle {
+            camera: Camera {
+                hdr: true,
+                ..default()
+            },
+            tonemapping: Tonemapping::BlenderFilmic,
             transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
+        BloomSettings::default(),
         FlyCam,
         FogSettings {
             color: Color::rgba(0.01, 0.01, 0.01, 0.9),
@@ -68,7 +77,7 @@ fn setup_cubes(
     mut material_assets: ResMut<Assets<StandardMaterial>>,
 ) {
     let mesh = mesh_assets.add(shape::Box::new(1., 1., 1.).into());
-    let material = material_assets.add(Color::rgb(1.0, 1.0, 1.0).into());
+    let material = material_assets.add(Color::rgb(15.0, 10.0, 1.0).into());
 
     for x in -5..5 {
         for y in -5..5 {
