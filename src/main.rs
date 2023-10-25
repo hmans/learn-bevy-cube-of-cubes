@@ -2,7 +2,6 @@ use bevy::{
     core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
     prelude::*,
 };
-use bevy_flycam::prelude::*;
 
 #[derive(Component)]
 struct Rotaty {
@@ -11,27 +10,22 @@ struct Rotaty {
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
-        .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.1)))
-        .insert_resource(bevy::pbr::DirectionalLightShadowMap { size: 4096 })
-        .insert_resource(AmbientLight {
-            color: Color::WHITE,
-            brightness: 0.2,
-        })
-        // FlyCam
-        .add_plugins(NoCameraPlayerPlugin)
-        .insert_resource(MovementSettings {
-            sensitivity: 0.00005,
-            speed: 7.0,
-        })
-        .insert_resource(KeyBindings {
-            move_ascend: KeyCode::E,
-            move_descend: KeyCode::Q,
-            ..Default::default()
-        })
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            primary_window: Some(Window {
+                present_mode: bevy::window::PresentMode::AutoVsync,
+                ..default()
+            }),
+            ..default()
+        }))
+        // .insert_resource(ClearColor(Color::rgb(0.1, 0.1, 0.1)))
+        // .insert_resource(bevy::pbr::DirectionalLightShadowMap { size: 4096 })
+        // .insert_resource(AmbientLight {
+        //     color: Color::WHITE,
+        //     brightness: 0.2,
+        // })
         // My Stuff
-        .add_systems(Startup, (setup_camera, setup_lighting, setup_cubes))
-        .add_systems(Update, rotate)
+        .add_systems(Startup, (setup_camera, setup_lighting))
+        // .add_systems(Update, rotate)
         // Let's go
         .run();
 }
@@ -40,35 +34,34 @@ fn setup_camera(mut commands: Commands) {
     commands.spawn((
         Camera3dBundle {
             camera: Camera {
-                hdr: true,
+                // hdr: true,
                 ..default()
             },
-            tonemapping: Tonemapping::BlenderFilmic,
+            // tonemapping: Tonemapping::BlenderFilmic,
             transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
-        BloomSettings::default(),
-        FlyCam,
-        FogSettings {
-            color: Color::rgba(0.01, 0.01, 0.01, 0.9),
-            falloff: FogFalloff::Linear {
-                start: 15.0,
-                end: 40.0,
-            },
-            ..default()
-        },
+        // BloomSettings::default(),
+        // FogSettings {
+        //     color: Color::rgba(0.01, 0.01, 0.01, 0.9),
+        //     falloff: FogFalloff::Linear {
+        //         start: 15.0,
+        //         end: 40.0,
+        //     },
+        //     ..default()
+        // },
     ));
 }
 
 fn setup_lighting(mut commands: Commands) {
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
-            illuminance: 1000.0,
-            ..default()
-        },
+    // commands.spawn(DirectionalLightBundle {
+    //     directional_light: DirectionalLight {
+    //         illuminance: 1000.0,
+    //         ..default()
+    //     },
 
-        ..default()
-    });
+    //     ..default()
+    // });
 }
 
 fn setup_cubes(
@@ -81,9 +74,9 @@ fn setup_cubes(
 
     let mut parent = commands.spawn((SpatialBundle::default(), Rotaty { t: 0.0 }));
 
-    for x in -5..5 {
-        for y in -5..5 {
-            for z in -5..5 {
+    for x in 1..2 {
+        for y in 1..2 {
+            for z in 1..2 {
                 parent.with_children(|p| {
                     p.spawn(PbrBundle {
                         mesh: mesh.clone(),
