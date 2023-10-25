@@ -79,11 +79,13 @@ fn setup_cubes(
     let mesh = mesh_assets.add(shape::Box::new(1., 1., 1.).into());
     let material = material_assets.add(Color::rgb(15.0, 10.0, 1.0).into());
 
+    let mut parent = commands.spawn((SpatialBundle::default(), Rotaty { t: 0.0 }));
+
     for x in -5..5 {
         for y in -5..5 {
             for z in -5..5 {
-                commands
-                    .spawn(PbrBundle {
+                parent.with_children(|p| {
+                    p.spawn(PbrBundle {
                         mesh: mesh.clone(),
                         material: material.clone(),
 
@@ -98,6 +100,7 @@ fn setup_cubes(
                     .insert(Rotaty {
                         t: (z as f32 * 10.0 + x as f32 + y as f32 * 0.15),
                     });
+                });
             }
         }
     }
