@@ -2,7 +2,6 @@ use bevy::{
     core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
     prelude::*,
 };
-use bevy_flycam::prelude::*;
 
 #[derive(Component)]
 struct Rotaty {
@@ -17,17 +16,6 @@ fn main() {
         .insert_resource(AmbientLight {
             color: Color::WHITE,
             brightness: 0.2,
-        })
-        // FlyCam
-        .add_plugins(NoCameraPlayerPlugin)
-        .insert_resource(MovementSettings {
-            sensitivity: 0.00005,
-            speed: 7.0,
-        })
-        .insert_resource(KeyBindings {
-            move_ascend: KeyCode::E,
-            move_descend: KeyCode::Q,
-            ..Default::default()
         })
         // My Stuff
         .add_systems(Startup, (setup_camera, setup_lighting, setup_cubes))
@@ -48,7 +36,6 @@ fn setup_camera(mut commands: Commands) {
             ..default()
         },
         BloomSettings::default(),
-        FlyCam,
         FogSettings {
             color: Color::rgba(0.01, 0.01, 0.01, 0.9),
             falloff: FogFalloff::Linear {

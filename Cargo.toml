@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = "0.11.3"
-bevy_flycam = "*"
+bevy = "0.12.0"
+# bevy_flycam = "*"
 
 [profile.dev]
 opt-level = 1
