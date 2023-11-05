@@ -32,7 +32,7 @@ fn setup_camera(mut commands: Commands) {
                 ..default()
             },
             tonemapping: Tonemapping::BlenderFilmic,
-            transform: Transform::from_xyz(20., 15., 20.).looking_at(Vec3::ZERO, Vec3::Y),
+            transform: Transform::from_xyz(66., 50., 66.).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         },
         BloomSettings::default(),
@@ -68,9 +68,9 @@ fn setup_cubes(
 
     let mut parent = commands.spawn((SpatialBundle::default(), Rotaty { t: 0.0 }));
 
-    for x in -5..5 {
-        for y in -5..5 {
-            for z in -5..5 {
+    for x in -20..20 {
+        for y in -20..20 {
+            for z in -20..20 {
                 parent.with_children(|p| {
                     p.spawn(PbrBundle {
                         mesh: mesh.clone(),
