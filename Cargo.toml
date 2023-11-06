@@ -9,6 +9,8 @@ bevy = { version = "0.12.0", features = ["dynamic_linking"] }
 
 [profile.dev]
 opt-level = 1
+debug = 1
 
 [profile.dev.package."*"]
+debug = false
 opt-level = 3
