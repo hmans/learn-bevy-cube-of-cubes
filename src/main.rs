@@ -68,10 +68,10 @@ fn setup_cubes(
 
     let mut parent = commands.spawn((SpatialBundle::default(), Rotaty { t: 0.0 }));
 
-    for x in -20..20 {
-        for y in -20..20 {
-            for z in -20..20 {
-                parent.with_children(|p| {
+    parent.with_children(|p| {
+        for x in -20..20 {
+            for y in -20..20 {
+                for z in -20..20 {
                     p.spawn(PbrBundle {
                         mesh: mesh.clone(),
                         material: material.clone(),
@@ -87,10 +87,10 @@ fn setup_cubes(
                     .insert(Rotaty {
                         t: (z as f32 * 10.0 + x as f32 + y as f32 * 0.15),
                     });
-                });
+                }
             }
         }
-    }
+    });
 }
 
 fn rotate(mut entities: Query<(&mut Transform, &Rotaty)>, time: Res<Time>) {
